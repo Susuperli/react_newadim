@@ -16,8 +16,18 @@ export const reqLogin = (username, password) => ajax(BASE_URL+'/login', { userna
 export const reqAdduser = user => ajax('/manage/user/add', user, 'POST');
 
 //请求地理位置
-export const reqCity = () => ajax('/api/ipJson.jsp?json=true')
+export const reqCity = () => ajax('/api/ipJson.jsp?json=true');
 
+//获取分类列表一级/二级
+export const reqCategorys = (parentId) => ajax(BASE_URL + '/manage/category/list', {parentId} )
+
+//添加分类
+export const reqAddCategorys = (categoryName,parentId) => ajax(BASE_URL + '/manage/category/add', {categoryName,parentId} ,"POST")
+
+//更新分类
+export const reqUpdateCategorys = ({categoryName,categoryId}) => ajax(BASE_URL + '/manage/category/update', {categoryName,categoryId}, 'POST' )
+
+ajax(BASE_URL+'/manage/category/list?parentld=0')
 /*
   jsonp请求的接口请求函数
 */

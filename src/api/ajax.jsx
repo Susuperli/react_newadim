@@ -13,8 +13,7 @@ import axios from 'axios'
 import {message} from 'antd'
 
 export default function ajax(url,data={},method='GET') {
-
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve)=>{
         let promise;
         //1、异步ajax请求
         if(method==='GET') {  //发送GET请求

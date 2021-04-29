@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { reqLogin } from '../../api'
+import { reqLogin, reqAdduser } from '../../api'
 import memoryUtils from '../../utils/memoryUtils'
 import stroageUtils from '../../utils/stroageUtils'
 import { Redirect } from 'react-router';
@@ -67,15 +67,6 @@ export default class Login extends Component {
                                 { min: 4, message: '密码至少4位!' },
                                 { max: 12, message: '密码至多12位!' },
                                 { whitespace: true, message: '密码不允许有空格' },
-                                // { validator :(rule, value) => {
-                                //     let reg = new RegExp(/^\w+$/);
-                                //     if(reg.test(value)) {
-                                //         return Promise.reject('密码必须由英文、数字或是下划线组成!');
-                                //     } else {
-                                //         return Promise.resolve();
-                                //     }
-                                //     }
-                                // }
                             ]}
                         >
                             <Input

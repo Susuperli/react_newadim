@@ -19,7 +19,7 @@ class Header extends Component {
     }
     getTime = () => {
         //每隔一秒都更新事件
-        this.setInter=setInterval(() => {
+        this.setInter = setInterval(() => {
             const currentTime = formateDate(Date.now());
             this.setState({ currentTime })
         }, 1000);
@@ -50,10 +50,9 @@ class Header extends Component {
         Modal.confirm({
             title: '您确定要退出吗？亲',
             icon: <ExclamationCircleOutlined />,
-            onOk: () =>{  //确认退出时
-                memoryUtils.user={};  //清除用户信息
+            onOk: () => {  //确认退出时
+                memoryUtils.user = {};  //清除用户信息
                 stroageUtils.removeUser();  //清除local
-                console.log(this.props)
                 this.props.history.replace('/login')
             },
         })
@@ -63,7 +62,7 @@ class Header extends Component {
         this.getTime()  //获取当前时间
         this.getWeather()  //获取当前时间
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         clearInterval(this.setInter);   //退出登录时，清除定时器
     }
     render() {
