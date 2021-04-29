@@ -1,0 +1,42 @@
+.header{
+    height: 80px;
+    background-color: #fff;
+}
+.header-top{
+    height: 40px;
+    line-height: 40px;
+    padding-right: 20px;
+    text-align: right;
+    border-bottom: 1px solid #1890ff;
+}
+.header-top span{
+    margin-right: 10px;
+}
+.header-bottom{
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+.hearder-bottom-left{
+    width: 25%;
+    text-align: center;
+    font-size: 20px;
+    position: relative;
+}
+.hearder-bottom-left::after{
+    content: '';
+    position: absolute;
+    right: 50%;  /*相对最近的定位父元素*/
+    transform: translateX(50%);
+    top: 100%;
+    border: 20px solid transparent;
+    border-top: 20px solid white;
+}
+.hearder-bottom-right{
+    width: 75%;
+    text-align: right;
+    margin-left: 30px;
+}
+.hearder-bottom-right span{
+    margin-right: 10px;
+}
