@@ -16,6 +16,9 @@ export const reqAdduser = user => ajax('/manage/user/add', user, 'POST');
 //请求地理位置
 export const reqCity = () => ajax('https://restapi.amap.com/v3/ip?key=110ce0078858def8cdee03cacdd91515')
 
+jsonp('http://whois.pconline.com.cn/ipJson.jsp?json=true',{},(data)=>{
+  console.log(data)
+})
 /*
   jsonp请求的接口请求函数
 */
