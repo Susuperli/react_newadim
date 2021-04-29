@@ -7,24 +7,23 @@
 import jsonp from 'jsonp'
 import ajax from './ajax'
 
+const BASE_URL='http://120.55.193.14:5000';
+
 //登陆
-export const reqLogin = (username, password) => ajax('/login', { username, password }, 'POST');
+export const reqLogin = (username, password) => ajax(BASE_URL+'/login', { username, password }, 'POST');
 
 //添加用户
 export const reqAdduser = user => ajax('/manage/user/add', user, 'POST');
 
 //请求地理位置
-export const reqCity = () => ajax('https://restapi.amap.com/v3/ip?key=110ce0078858def8cdee03cacdd91515')
+export const reqCity = () => ajax('/api/ipJson.jsp?json=true')
 
-jsonp('http://whois.pconline.com.cn/ipJson.jsp?json=true',{},(data)=>{
-  console.log(data)
-})
 /*
   jsonp请求的接口请求函数
 */
-export const reqWeather = adcod => {
+export const reqWeather = cityCode => {
   return new Promise((resolve, reject) => {
-    const url = 'https://restapi.amap.com/v3/weather/weatherInfo?key=110ce0078858def8cdee03cacdd91515&city=' + adcod;
+    const url = 'https://restapi.amap.com/v3/weather/weatherInfo?key=110ce0078858def8cdee03cacdd91515&city=' + cityCode;
     jsonp(url, {}, (error, data) => {
       if (!error && data.status === '1') {
         const { city, weather } = data.lives[0]
