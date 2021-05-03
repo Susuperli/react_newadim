@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Card, Button, Table, Space, message, Modal, } from 'antd';
 import { PlusOutlined, SwapRightOutlined } from '@ant-design/icons'
-import UpdateCategory from './addCategory'
-import AddCategory from './updateCategory'
- 
-import { reqCategorys } from '../../api'
+import UpdateCategory from './updateCategory'
+import AddCategory from './addCategory'
+
+import { reqCategorys, reqUpdateCategorys } from '../../api'
 
 export default class Category extends Component {
     state = {
@@ -96,14 +96,31 @@ export default class Category extends Component {
         console.log('add')
     }
     //展示更新
-    showUpdate = (category) => {
-        this.categoryName = category.name;
+    showUpdate = category => {
+        this.category = category;
+        this.categoryName=category.name || '';//初始化，如果开始没有传入东西默认为''，防止未定义而导致的报错,以及会出现空对象现象。
+        console.log(1)
+        console.log(this.categoryName)
         this.setState({
             showStatus: '2'
         })
     }
     //更新分类
-    updateCategory = () => {
+    updateCategory = async () => {
+        //1、关闭显示框
+        this.setState({
+            showStatus: '0' //关闭显示框
+        })
+        // 2、准备数据，请求更新数据
+        const categoryName = this.UpdateCategoryName;  //获取有子组件传过来的id
+        const categoryId = this.category._id;  //获取id
+        // console.log(this.categoryName)
+        const result = await reqUpdateCategorys({ categoryName, categoryId })
+        if (result.status === 0) {
+            console.log('眯眯眼登上了月球')
+            //3、重新获取列表
+            this.getCategorys()
+        }
         console.log('update')
     }
 
@@ -117,7 +134,7 @@ export default class Category extends Component {
     render() {
         // console.log('我渲染了')
         const { categorys, parentId, subCategorys, loading, parentName, showStatus } = this.state  //读取状态值
-        const categoryName = this.categoryName || {}; //初始化，如果开始没有传入东西默认为{}，防止未定义而导致的报错。
+        const categoryName = this.categoryName; 
         const title = parentId === '0' ? '一级列表' : <span> <a href="#!" onClick={this.showCategorys}>一级列表</a><SwapRightOutlined style={{ marginRight: 10, marginLeft: 10 }} />{parentName} </span>;
         const extra = (
             <Button type='primary' onClick={this.showAdd}>
@@ -144,7 +161,10 @@ export default class Category extends Component {
                     visible={showStatus === '2'}
                     onOk={this.updateCategory}
                     onCancel={this.handleCancel}>
-                    <UpdateCategory categoryName={categoryName}  />
+                    <UpdateCategory
+                    categoryName={categoryName} 
+                    getUpdateCategoryName={(newCategoryName)=>{this.UpdateCategoryName=newCategoryName}} 
+                    />
                 </Modal>
             </Card>
         )

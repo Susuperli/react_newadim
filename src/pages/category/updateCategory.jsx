@@ -1,26 +1,45 @@
 import React, { Component } from 'react'
-import { Form, Select, Input } from 'antd'
+import { Form, Input } from 'antd'
 
-export default class AddCategory extends Component {
+export default class UpdateCategory extends Component {
+    state={
+        value:''
+    }
+    changeInput=(e) =>{
+        console.log(e.target.value)
+        this.setState({value: e.target.value},()=>{this.props.getUpdateCategoryName(this.state.value)}) 
+    }
+    // static getDerivedStateFromProps(nextProps, prevState){
+    //     if(nextProps.categoryName !== prevState.value){
+    //         return {
+    //             value:nextProps.categoryName
+    //         }
+    //     }
+    //     return null;
+    // }
+
+    UNSAFE_componentWillReceiveProps(newProps){
+        if(newProps!==this.state.value){
+            this.setState({
+                value:newProps.categoryName,
+            })
+        }
+    }
+    UNSAFE_componentWillMount(){
+        this.setState({
+            value:this.props.categoryName
+        })
+    }
     render() {
         return (
             <div>
                 <Form>
-                    <Form.Item >
-                        <Select
-                            defaultValue={'dem'}
-                            defaultActiveFirstOption={false}
-                        >
-                            <Select.Option value="dem">Demo0</Select.Option>
-                            <Select.Option value="demo1">Demo1</Select.Option>
-                            <Select.Option value="demo2">Demo2</Select.Option>
-                            <Select.Option value="demo3">Demo3</Select.Option>
-                            <Select.Option value="demo4">Demo4</Select.Option>
-                        </Select>
+                    <Form.Item>
+                        <Input placeholder='请输入分类名称' value={this.state.value} onChange={this.changeInput}></Input>
                     </Form.Item>
-                    <Input placeholder='请输入分类名称'></Input>
                 </Form>
             </div>
         )
     }
 }
+
