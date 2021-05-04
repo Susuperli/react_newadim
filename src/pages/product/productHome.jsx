@@ -3,14 +3,25 @@ import { Card, Select, Input, Button, Table } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 
 import {reqProducts} from '../../api'
+import {PAGE_SIZE} from '../../utils/constants'
 const Option = Select.Option
 
 export default class ProductHome extends Component {
-
+    state={
+        total : 0 ,  //商品总数量
+        products :[] , //商品的数组
+        loading : false , //loading动画
+    }
     getProducts = async (pageNum) => {
-        const result = await reqProducts(pageNum , 5)
+        this.setState({loading:true})  //显示loading
+        const result = await reqProducts(pageNum , PAGE_SIZE)
+        this.setState({loading:false})  //隐藏loading
         if(result.status === 0){
-            console.log(result.data)
+            const {total ,list} = result.data;
+            this.setState({
+                total,
+                products:list
+            })
         }
     }
 
@@ -34,20 +45,7 @@ export default class ProductHome extends Component {
                 添加商品
             </Button>
         )
-        const dataSource = [
-            {
-                key: '1',
-                name: '胡彦斌',
-                age: 32,
-                address: '西湖区湖底公园1号',
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                age: 42,
-                address: '西湖区湖底公园1号',
-            },
-        ];
+        const {products , total , loading} = this.state
 
         const columns = [
             {
@@ -60,21 +58,44 @@ export default class ProductHome extends Component {
             },
             {
                 title: '价格',
+                width: 150,
                 dataIndex: 'price',
                 render :(price) => '￥' + price  //当前dataindex指定了对应的属性，传入对应的属性值；不指定就会是当前对象
             },
             {
                 title: '状态',
+                width: 150,
                 dataIndex: 'status',
-                // render
+                render : (status) => {
+                    return(
+                        <span>
+                            <Button type='primary'> 下架</Button>
+                            <span>在售</span>
+                        </span>
+                    )
+                }
             },
             {
                 title: '操作',
+                render : (product) => {
+                    return(
+                        <span>
+                            <a href='#!'>详情</a>
+                            <a href='#!'>修改</a>
+                        </span>
+                    )
+                }
             },
         ];
         return (
             <Card title={title} extra={extra}>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table 
+                dataSource={products} 
+                loading={loading}
+                columns={columns} bordered 
+                rowKey='_id'
+                pagination={{total,defaultPageSize:PAGE_SIZE,showQuickJumper:true,onChange:this.getProducts}} 
+                />
             </Card>
         )
     }
