@@ -4,7 +4,7 @@ import { PlusOutlined, SwapRightOutlined } from '@ant-design/icons'
 import UpdateCategory from './updateCategory'
 import AddCategory from './addCategory'
 
-import { reqCategorys, reqUpdateCategorys , reqAddCategorys } from '../../api'
+import { reqCategorys, reqUpdateCategorys, reqAddCategorys } from '../../api'
 
 export default class Category extends Component {
     state = {
@@ -92,48 +92,49 @@ export default class Category extends Component {
             showStatus: 0
         })
         //收集数据，提交请求
-        const categoryName=this.AddCategoryName;  //获取需要添加的name 
-        const AddCategoryId=this.AddCategoryId;  //默认的id值
-        const AddChangeCategoryId=this.AddChangeCategoryId;  //更改的id值
-        if(!AddChangeCategoryId){ //如果没有更改就获取默认的id值。
-            const result=await reqAddCategorys(categoryName,AddCategoryId);  //传入默认的id值
-            if(result.status===0){
+        const categoryName = this.AddCategoryName;  //获取需要添加的name 
+        const AddCategoryId = this.AddCategoryId;  //默认的id值
+        const AddChangeCategoryId = this.AddChangeCategoryId;  //更改的id值
+        if (!AddChangeCategoryId) { //如果没有更改就获取默认的id值。
+            const result = await reqAddCategorys(categoryName, AddCategoryId);  //传入默认的id值
+            if (result.status === 0) {
                 //重新获取分类列表显示
                 this.getCategorys()
             }
-        }else if (AddChangeCategoryId){  //如果检测到了id值的变化
-            const result=await reqAddCategorys(categoryName,AddChangeCategoryId);  //传入变化后的id值
-            if(result.status===0){
+        } else if (AddChangeCategoryId) {  //如果检测到了id值的变化
+            const result = await reqAddCategorys(categoryName, AddChangeCategoryId);  //传入变化后的id值
+            if (result.status === 0) {
                 //重新获取分类列表显示
                 this.getCategorys()  //刷新
             }
         }
-             
     }
     //展示更新
     showUpdate = category => {
         this.category = category;
-        this.categoryName=category.name || '';//初始化，如果开始没有传入东西默认为''，防止未定义而导致的报错,以及会出现空对象现象。
+        this.categoryName = category.name || '';//初始化，如果开始没有传入东西默认为''，防止未定义而导致的报错,以及会出现空对象现象。
         this.setState({
             showStatus: '2'
         })
     }
     //更新分类
     updateCategory = async () => {
-        //1、关闭显示框
-        this.setState({
-            showStatus: '0' //关闭显示框
-        })
         // 2、准备数据，请求更新数据
         const categoryName = this.UpdateCategoryName;  //获取有子组件传过来的id
+        console.log(categoryName)
         const categoryId = this.category._id;  //获取id
-        // console.log(this.categoryName)
-        const result = await reqUpdateCategorys({ categoryName, categoryId })
-        if (result.status === 0) {
-            //3、重新获取列表
-            this.getCategorys()
+        if (categoryName !== undefined) {//如果为非空字符串才可以继续操作
+            //1、关闭显示框
+            this.setState({
+                showStatus: '0' //关闭显示框
+            })
+            // console.log(this.categoryName)
+            const result = await reqUpdateCategorys({ categoryName, categoryId })
+            if (result.status === 0) {
+                //3、重新获取列表
+                this.getCategorys()
+            }
         }
-        console.log('update')
     }
 
     UNSAFE_componentWillMount() {
@@ -145,7 +146,7 @@ export default class Category extends Component {
 
     render() {
         const { categorys, parentId, subCategorys, loading, parentName, showStatus } = this.state  //读取状态值
-        const categoryName = this.categoryName; 
+        const categoryName = this.categoryName;
         const title = parentId === '0' ? '一级列表' : <span> <a href="#!" onClick={this.showCategorys}>一级列表</a><SwapRightOutlined style={{ marginRight: 10, marginLeft: 10 }} />{parentName} </span>;
         const extra = (
             <Button type='primary' onClick={this.showAdd}>
@@ -166,13 +167,13 @@ export default class Category extends Component {
                     visible={showStatus === '1'}
                     onOk={this.addCategory}
                     onCancel={this.handleCancel}>
-                    <AddCategory 
-                    categorys={categorys}
-                    parentId={parentId}
-                    addCategoryName={this.state.parentName}
-                    getAddCategoryName={(newCategoryName)=>{this.AddCategoryName=newCategoryName}} 
-                    getAddCategoryId={(newCategoryId)=>{this.AddCategoryId=newCategoryId}} 
-                    getChangeAddCategoryId={(newCategoryId)=>{this.AddChangeCategoryId=newCategoryId}}
+                    <AddCategory
+                        categorys={categorys}
+                        parentId={parentId}
+                        addCategoryName={this.state.parentName}
+                        getAddCategoryName={(newCategoryName) => { this.AddCategoryName = newCategoryName }}
+                        getAddCategoryId={(newCategoryId) => { this.AddCategoryId = newCategoryId }}
+                        getChangeAddCategoryId={(newCategoryId) => { this.AddChangeCategoryId = newCategoryId }}
                     />
                 </Modal>
                 <Modal title="更新分类"
@@ -180,8 +181,8 @@ export default class Category extends Component {
                     onOk={this.updateCategory}
                     onCancel={this.handleCancel}>
                     <UpdateCategory
-                    categoryName={categoryName} 
-                    getUpdateCategoryName={(newCategoryName)=>{this.UpdateCategoryName=newCategoryName}} 
+                        categoryName={categoryName}
+                        getUpdateCategoryName={(newCategoryName) => { this.UpdateCategoryName = newCategoryName }}
                     />
                 </Modal>
             </Card>

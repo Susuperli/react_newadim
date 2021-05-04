@@ -27,7 +27,10 @@ export const reqAddCategorys = (categoryName,parentId) => ajax(BASE_URL + '/mana
 //更新分类
 export const reqUpdateCategorys = ({categoryName,categoryId}) => ajax(BASE_URL + '/manage/category/update', {categoryName,categoryId}, 'POST' )
 
-ajax(BASE_URL+'/manage/category/list?parentld=0')
+//获取商品的分页列表
+export const reqProducts = (pageNum ,pageSize) => ajax(BASE_URL + '/manage/product/list' , {pageNum ,pageSize})
+
+
 /*
   jsonp请求的接口请求函数
 */
@@ -57,5 +60,20 @@ export const reqWeather = cityCode => {
         接收到请求处理产生的结果数据后，返回一个函数的调用的js代码，并将结果数据作为实参传入函数调用
       浏览器端
         收到响应的自动执行函数调用的js代码，也就执行了提前定义好的回调函数，并得到了需要的结果数据。
+*/
+
+/*
+分页列表
+    1、纯前台分页
+      请求获取数据：一次获取所有数据，翻页不需要发请求。
+      请求接口：
+        不需要指定页码pageNum和每页数量pageSize
+        响应数据：所有数据的数组
+    2、基于后台的分页
+      请求获取数据：每次只能获取当前页的数据，翻页必须发请求。
+      请求接口：需要指定页码pageNum和每页数量pageSize
+      响应数据：当前页数据的数组 + 总记录数total
+    3、如何选择
+      基于数据的多少来选择
 */
 

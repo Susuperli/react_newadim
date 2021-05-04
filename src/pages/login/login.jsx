@@ -50,7 +50,7 @@ export default class Login extends Component {
                         <Form.Item
                             name="username"
                             rules={[  //模板所提供的的自定义验证
-                                { brequired: true, message: 'Please input your Username！', },
+                                { required: true, message: 'Please input your Username！', },
                                 { min: 4, message: '用户名至少4位!' },
                                 { max: 12, message: '用户名至多12位!' },
                                 { pattern: /^\w+$/, message: '用户名必须由英文、数字或是下划线组成!' },
