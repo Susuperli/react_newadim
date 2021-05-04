@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { reqLogin, reqAdduser } from '../../api'
+import { reqLogin } from '../../api'
 import memoryUtils from '../../utils/memoryUtils'
 import stroageUtils from '../../utils/stroageUtils'
 import { Redirect } from 'react-router';

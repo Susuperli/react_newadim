@@ -4,30 +4,24 @@ import { PlusOutlined, SwapRightOutlined } from '@ant-design/icons'
 import UpdateCategory from './updateCategory'
 import AddCategory from './addCategory'
 
-import { reqCategorys, reqUpdateCategorys } from '../../api'
+import { reqCategorys, reqUpdateCategorys , reqAddCategorys } from '../../api'
 
 export default class Category extends Component {
     state = {
         loading: false,//是否正在获取数据
         categorys: [], //一级分类列表
-        subCategorys: [], //字分类列表
-        parentId: '0',//当前需要显示的父id
+        subCategorys: [], //子分类列表
+        parentId: '0',//当前需要显示的父id，判断显示一级还是二级列表。
         parentName: '', //分类名称
         showStatus: '0' //标识添加/更新的确认框是否显示，0：都不显示，1：显示添加，2：显示更新
     }
 
     //获取一级或是二级分类列表显示
     getCategorys = async () => {
-        // console.log('我要请求了')
-        //请求前用loading
-        // console.log('显示前')
         this.setState({ loading: true })  // 显示loading
-        // console.log('显示后')
         const { parentId } = this.state
         const result = await reqCategorys(parentId);  //请求分类状态
-        // console.log('隐藏前')
         this.setState({ loading: false })   //隐藏loading
-        // console.log('隐藏后')
         if (result.status === 0) {
             //取出分类列表可能是一级的也可能是二级的
             const categorys = result.data;
@@ -44,7 +38,7 @@ export default class Category extends Component {
     showSubCategorys = category => {
         // 更新状态
         this.setState({
-            parentId: category._id,
+            parentId: category._id,  //更改parentId来改变列表的获取
             parentName: category.name,
         }, () => {  //在状态更新且render之后执行
             //获取二级列表显示
@@ -92,15 +86,34 @@ export default class Category extends Component {
         })
     }
     //添加分类
-    addCategory = () => {
-        console.log('add')
+    addCategory = async () => {
+        //隐藏确认框
+        this.setState({
+            showStatus: 0
+        })
+        //收集数据，提交请求
+        const categoryName=this.AddCategoryName;  //获取需要添加的name 
+        const AddCategoryId=this.AddCategoryId;  //默认的id值
+        const AddChangeCategoryId=this.AddChangeCategoryId;  //更改的id值
+        if(!AddChangeCategoryId){ //如果没有更改就获取默认的id值。
+            const result=await reqAddCategorys(categoryName,AddCategoryId);  //传入默认的id值
+            if(result.status===0){
+                //重新获取分类列表显示
+                this.getCategorys()
+            }
+        }else if (AddChangeCategoryId){  //如果检测到了id值的变化
+            const result=await reqAddCategorys(categoryName,AddChangeCategoryId);  //传入变化后的id值
+            if(result.status===0){
+                //重新获取分类列表显示
+                this.getCategorys()  //刷新
+            }
+        }
+             
     }
     //展示更新
     showUpdate = category => {
         this.category = category;
         this.categoryName=category.name || '';//初始化，如果开始没有传入东西默认为''，防止未定义而导致的报错,以及会出现空对象现象。
-        console.log(1)
-        console.log(this.categoryName)
         this.setState({
             showStatus: '2'
         })
@@ -117,7 +130,6 @@ export default class Category extends Component {
         // console.log(this.categoryName)
         const result = await reqUpdateCategorys({ categoryName, categoryId })
         if (result.status === 0) {
-            console.log('眯眯眼登上了月球')
             //3、重新获取列表
             this.getCategorys()
         }
@@ -132,7 +144,6 @@ export default class Category extends Component {
     }
 
     render() {
-        // console.log('我渲染了')
         const { categorys, parentId, subCategorys, loading, parentName, showStatus } = this.state  //读取状态值
         const categoryName = this.categoryName; 
         const title = parentId === '0' ? '一级列表' : <span> <a href="#!" onClick={this.showCategorys}>一级列表</a><SwapRightOutlined style={{ marginRight: 10, marginLeft: 10 }} />{parentName} </span>;
@@ -150,12 +161,19 @@ export default class Category extends Component {
                     dataSource={parentId === '0' ? categorys : subCategorys}
                     columns={this.columns}
                     pagination={{ defaultPageSize: 5, showQuickJumper: true, }}
-                />;
+                />
                 <Modal title="添加分类"
                     visible={showStatus === '1'}
                     onOk={this.addCategory}
                     onCancel={this.handleCancel}>
-                    <AddCategory></AddCategory>
+                    <AddCategory 
+                    categorys={categorys}
+                    parentId={parentId}
+                    addCategoryName={this.state.parentName}
+                    getAddCategoryName={(newCategoryName)=>{this.AddCategoryName=newCategoryName}} 
+                    getAddCategoryId={(newCategoryId)=>{this.AddCategoryId=newCategoryId}} 
+                    getChangeAddCategoryId={(newCategoryId)=>{this.AddChangeCategoryId=newCategoryId}}
+                    />
                 </Modal>
                 <Modal title="更新分类"
                     visible={showStatus === '2'}

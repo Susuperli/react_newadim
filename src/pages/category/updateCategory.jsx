@@ -6,7 +6,6 @@ export default class UpdateCategory extends Component {
         value:''
     }
     changeInput=(e) =>{
-        console.log(e.target.value)
         this.setState({value: e.target.value},()=>{this.props.getUpdateCategoryName(this.state.value)}) 
     }
     // static getDerivedStateFromProps(nextProps, prevState){
