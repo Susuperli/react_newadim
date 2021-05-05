@@ -6,23 +6,15 @@ export default class UpdateCategory extends Component {
         value: ''
     }
     changeInput = (e) => {
-        this.setState({ value: e.target.value }, () => { this.props.getUpdateCategoryName(this.state.value) })
+        this.setState({ value: e.target.value });
+        this.props.getUpdateCategoryName(e.target.value);  //将form对象传递给父组件
     }
-    changedata = (data) => {
-        this.props.getUpdateCategoryName(data.updata)
+    changedata = () => {
+        console.log(this.updateForm)
+        this.props.getUpdateCategoryName(this.updateForm);  //将form对象传递给父组件
+        this.setState({ value: this.updateForm.getFieldValue().update })   //将改变的输入值来改变状态
     }
-    // cleanMe = (e) => {
-    //     e.target.value=''
-    // }
 
-    // static getDerivedStateFromProps(nextProps, prevState){
-    //     if(nextProps.categoryName !== prevState.value){
-    //         return {
-    //             value:nextProps.categoryName
-    //         }
-    //     }
-    //     return null;
-    // }
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps !== this.state.value) {
             this.setState({
@@ -36,24 +28,22 @@ export default class UpdateCategory extends Component {
         })
     }
     render() {
-        const {categoryName} = this.props
         return (
             <div>
                 <Form 
-                // onValuesChange={this.changedata}
+                onValuesChange={this.changedata}
+                ref = {form => this.updateForm = form}
                 >
                     <Form.Item
-                        // name='updata'
-                        initialvalues={categoryName}
+                        // name='update'
                         rules={[
                             {
                                 required: true,
                                 message: '请输入必要的更新值',
-                                whitespace: true
                             }
                         ]}
                     >
-                        <Input placeholder='请输入分类名称'  name='updata' onChange={this.changeInput}  value= {this.state.value} />
+                        <Input placeholder='请输入分类名称' value={this.state.value} onChange={this.changeInput} />
                     </Form.Item>
                 </Form>
             </div>

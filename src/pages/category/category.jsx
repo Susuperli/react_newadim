@@ -120,8 +120,7 @@ export default class Category extends Component {
     //更新分类
     updateCategory = async () => {
         // 2、准备数据，请求更新数据
-        const categoryName = this.UpdateCategoryName;  //获取有子组件传过来的id
-        console.log(categoryName)
+        const categoryName = this.UpdateCategoryName;  //获取有子组件传过来新的名字
         const categoryId = this.category._id;  //获取id
         if (categoryName !== undefined) {//如果为非空字符串才可以继续操作
             //1、关闭显示框
@@ -182,7 +181,8 @@ export default class Category extends Component {
                     onCancel={this.handleCancel}>
                     <UpdateCategory
                         categoryName={categoryName}
-                        getUpdateCategoryName={(newCategoryName) => { this.UpdateCategoryName = newCategoryName }}
+                        getUpdateCategoryName = {newCategoryName => this.UpdateCategoryName = newCategoryName }
+                        // getUpdateCategoryName={(newCategoryName) => { this.UpdateCategoryName = newCategoryName }}
                     />
                 </Modal>
             </Card>

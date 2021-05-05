@@ -30,6 +30,13 @@ export const reqUpdateCategorys = ({categoryName,categoryId}) => ajax(BASE_URL +
 //获取商品的分页列表
 export const reqProducts = (pageNum ,pageSize) => ajax(BASE_URL + '/manage/product/list' , {pageNum ,pageSize})
 
+//获取搜索商品的分页列表
+export const reqSearchProducts = (pageNum , pageSize , searchType , productInput) => ajax( BASE_URL + '/manage/product/search',{
+  pageNum ,
+  pageSize,
+  [searchType] : productInput  
+})//searchType是一个变量，因为有两种可能,axios.get的对象传参
+
 
 /*
   jsonp请求的接口请求函数
