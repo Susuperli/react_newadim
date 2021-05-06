@@ -57,7 +57,7 @@ export default class ProductHome extends Component {
             </span>
         )
         const extra = (
-            <Button type='primary'>
+            <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')} >
                 <PlusOutlined />
                 添加商品
             </Button>
@@ -105,7 +105,7 @@ export default class ProductHome extends Component {
                         <span>
                             <button style={{ outline: 'none', border: 'none', cursor: 'pointer', background: 'transparent', color: '#1890ff' }} onClick={() => this.props.history.push('/product/detail', product)} >详情</button>  {/*push方法的第二个参数，可以将product通过location传到目标组件 */}
                             <br></br>
-                            <button style={{ outline: 'none', border: 'none', cursor: 'pointer', background: 'transparent', color: '#1890ff' }}>修改</button>
+                            <button style={{ outline: 'none', border: 'none', cursor: 'pointer', background: 'transparent', color: '#1890ff' }} onClick={() => this.props.history.push('/product/addupdate', product)}>修改</button>
                         </span>
                     )
                 }
