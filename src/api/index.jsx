@@ -21,6 +21,9 @@ export const reqCity = () => ajax('/api/ipJson.jsp?json=true');
 //获取分类列表一级/二级
 export const reqCategorys = (parentId) => ajax(BASE_URL + '/manage/category/list', {parentId} )
 
+//获取一个商品地分类列表
+export const reqCategory= (CategoryId) => ajax(BASE_URL + '/manage/category/info' , {CategoryId})
+
 //添加分类
 export const reqAddCategorys = (categoryName,parentId) => ajax(BASE_URL + '/manage/category/add', {categoryName,parentId} ,"POST")
 
@@ -37,6 +40,8 @@ export const reqSearchProducts = (pageNum , pageSize , searchType , productInput
   [searchType] : productInput  
 })//searchType是一个变量，因为有两种可能,axios.get的对象传参
 
+//更改一个商品的状态
+export const reqUpdateStatus = ( productId , status) => ajax(BASE_URL + '/manage/product/updateStatus' , {productId , status} , 'POST')
 
 /*
   jsonp请求的接口请求函数

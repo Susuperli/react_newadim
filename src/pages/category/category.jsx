@@ -18,10 +18,15 @@ export default class Category extends Component {
 
     //获取一级或是二级分类列表显示
     getCategorys = async () => {
+        console.log('进入async函数')
+        console.log('显示前')
         this.setState({ loading: true })  // 显示loading
+        console.log('显示后')
         const { parentId } = this.state
         const result = await reqCategorys(parentId);  //请求分类状态
+        console.log('隐藏前')
         this.setState({ loading: false })   //隐藏loading
+        console.log('隐藏后')
         if (result.status === 0) {
             //取出分类列表可能是一级的也可能是二级的
             const categorys = result.data;
@@ -144,6 +149,7 @@ export default class Category extends Component {
     }
 
     render() {
+        console.log('我要渲染啦')
         const { categorys, parentId, subCategorys, loading, parentName, showStatus } = this.state  //读取状态值
         const categoryName = this.categoryName;
         const title = parentId === '0' ? '一级列表' : <span> <a href="#!" onClick={this.showCategorys}>一级列表</a><SwapRightOutlined style={{ marginRight: 10, marginLeft: 10 }} />{parentName} </span>;
