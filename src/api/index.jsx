@@ -43,6 +43,13 @@ export const reqSearchProducts = (pageNum , pageSize , searchType , productInput
 //更改一个商品的状态
 export const reqUpdateStatus = ( productId , status) => ajax(BASE_URL + '/manage/product/updateStatus' , {productId , status} , 'POST')
 
+//添加商品
+export const reqAddAndUpdateProduct = (product) => ajax(BASE_URL + '/manage/product/'+(product?'update':'add'),product,'POST')
+
+//更新商品
+//export const reqAddProduct = (product) => ajax(BASE_URL + '/manage/product/update',product,'POST')
+
+
 /*
   jsonp请求的接口请求函数
 */
